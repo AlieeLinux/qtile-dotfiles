@@ -1,12 +1,31 @@
 #!/bin/bash
 
-depends=(eza qtile rofi wal)
+
+
+installyay() {
+    sudo pacman -Sy --needed base-devel 
+    git clone https://aur.archlinux.org/yay
+    cd "yay" || return
+    makepkg -Csi
+}
+
+
+
+
+
+depends=(eza qtile rofi wal swww )
 
 noninstalled=()
 
 [ -f /lib/python3.13/site-packages/qtile_extras/bar.py ] || yay -S qtile-extras
 
-[ -f /bin/yay ] && echo "Yay installed"
+
+
+if [ -f /bin/yay ]; then
+    echo "Yay installed"
+else
+    installyay
+fi
 
 for i in "${depends[@]}"; do
     if [ -f /bin/"$i" ]; then
@@ -25,4 +44,6 @@ case "$p" in
         sudo systemctl enable ly
         ;;
 esac
+
+
 
